@@ -91,6 +91,21 @@
           <!-- populated by JS -->
         </div>
 
+        <p class="muted metrics-hint">Click any metric card to explore the yearly trend generated from the publications database.</p>
+
+        <div class="metrics-visualization" id="metricsViz" hidden>
+          <div class="viz-header">
+            <div>
+              <p class="label">Yearly trend</p>
+              <h3 id="metricsVizTitle">Metric trend</h3>
+              <p class="muted" id="metricsVizSubtitle"></p>
+            </div>
+            <button class="btn btn-ghost" id="metricsVizClose" type="button">Hide</button>
+          </div>
+          <div class="viz-chart" id="metricsVizChart"></div>
+          <p class="fineprint" id="metricsVizLegend"></p>
+        </div>
+
         <p class="fineprint" id="metricsUpdated"></p>
       </div>
     </section>
