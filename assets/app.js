@@ -19,11 +19,26 @@
     return res.json();
   }
 
+  async function readOptionalJSON(url) {
+    try {
+      return await readJSON(url);
+    } catch (err) {
+      console.warn(`Optional data not loaded: ${url}`, err);
+      return null;
+    }
+  }
+
   function fmtNumber(x) {
     if (x === null || x === undefined || x === "") return "—";
     const n = Number(x);
     if (Number.isNaN(n)) return String(x);
     return new Intl.NumberFormat("en-US").format(n);
+  }
+
+  function toNumber(value) {
+    if (value === null || value === undefined || value === "") return 0;
+    const n = Number(value);
+    return Number.isNaN(n) ? 0 : n;
   }
 
   function escapeHTML(s) {
@@ -33,6 +48,14 @@
       .replaceAll(">", "&gt;")
       .replaceAll('"', "&quot;")
       .replaceAll("'", "&#039;");
+  }
+
+  function normalizeTitle(value) {
+    return String(value || "")
+      .toLowerCase()
+      .normalize("NFKD")
+      .replace(/[^\p{L}\p{N}]+/gu, " ")
+      .trim();
   }
 
   function ensureSelectOptions(selectEl, values, allLabel = "All") {
@@ -108,20 +131,24 @@
     const derived = derivedTotals || {};
 
     const cards = [
-      { label: "Google Scholar citations", value: fmtNumber(scholar.citations_all), hint: `Last updated: ${scholar.last_updated || "—"}` },
-      { label: "Google Scholar h-index", value: fmtNumber(scholar.h_index_all), hint: "Source: Google Scholar" },
-      { label: "MNiSW points (computed)", value: fmtNumber(totals.mnicsw_points), hint: "Computed from publications.csv" },
-      { label: "Sum of journal impact factors (computed)", value: fmtNumber(totals.sum_impact_factor), hint: "Computed from publications.csv" },
-      { label: "Publications (List A)", value: fmtNumber(totals.publications_list_a), hint: "Journal articles with IF" },
-      { label: "Publications (List B)", value: fmtNumber(derived.publications_list_b), hint: "Professional articles & case reports" },
-      { label: "Journal articles (total)", value: fmtNumber(derived.journal_articles_total), hint: "All journal articles" },
-      { label: "Articles + conferences (total)", value: fmtNumber(derived.articles_and_conferences_total), hint: "Journal articles + conference contributions" },
-      { label: "Conference contributions (total)", value: fmtNumber(totals.conference_contributions_total), hint: `Oral: ${fmtNumber(totals.conference_oral_presentations)} · Poster: ${fmtNumber(totals.conference_posters)}` },
+      { key: "citations", label: "Google Scholar citations", value: fmtNumber(scholar.citations_all), hint: `Last updated: ${scholar.last_updated || "—"}` },
+      { key: "h_index", label: "Google Scholar h-index", value: fmtNumber(scholar.h_index_all), hint: "Source: Google Scholar" },
+      { key: "mnicsw_points", label: "MNiSW points (computed)", value: fmtNumber(totals.mnicsw_points), hint: "Computed from publications.csv" },
+      { key: "sum_impact_factor", label: "Sum of journal impact factors (computed)", value: fmtNumber(totals.sum_impact_factor), hint: "Computed from publications.csv" },
+      { key: "publications_list_a", label: "Publications (List A)", value: fmtNumber(totals.publications_list_a), hint: "Journal articles with IF" },
+      { key: "publications_list_b", label: "Publications (List B)", value: fmtNumber(derived.publications_list_b), hint: "Professional articles & case reports" },
+      { key: "journal_articles_total", label: "Journal articles (total)", value: fmtNumber(derived.journal_articles_total), hint: "Publications (List A + B)" },
+      { key: "articles_and_conferences_total", label: "Articles + conferences (total)", value: fmtNumber(derived.articles_and_conferences_total), hint: "Journal articles + conference contributions" },
+      { key: "conference_contributions_total", label: "Conference contributions (total)", value: fmtNumber(totals.conference_contributions_total), hint: `Oral: ${fmtNumber(totals.conference_oral_presentations)} · Poster: ${fmtNumber(totals.conference_posters)}` },
     ];
 
     cards.forEach((c) => {
       const card = document.createElement("div");
       card.className = "card";
+      card.dataset.metricKey = c.key;
+      card.dataset.metricLabel = c.label;
+      card.setAttribute("role", "button");
+      card.setAttribute("tabindex", "0");
       card.innerHTML = `
         <p class="label">${escapeHTML(c.label)}</p>
         <p class="value">${escapeHTML(c.value)}</p>
@@ -156,6 +183,9 @@
       const doiUrl = `https://doi.org/${r.doi}`;
       parts.push(`<a href="${doiUrl}" target="_blank" rel="noopener">DOI</a>`);
     }
+    if (r.scholar_citations !== undefined && r.scholar_citations !== null && r.scholar_citations !== "") {
+      parts.push(`<span>Citations: ${escapeHTML(fmtNumber(r.scholar_citations))}</span>`);
+    }
     if (r.start_date || r.end_date) {
       const range = [r.start_date, r.end_date].filter(Boolean).join("–");
       parts.push(`<span>${escapeHTML(range)}</span>`);
@@ -164,6 +194,146 @@
       parts.push(`<span>${escapeHTML([r.city, r.country].filter(Boolean).join(", "))}</span>`);
     }
     return parts.join(" · ");
+  }
+
+  function mergeScholarCitations(records, citationsData) {
+    if (!citationsData) return records;
+    const items = Array.isArray(citationsData.items) ? citationsData.items : Array.isArray(citationsData) ? citationsData : [];
+    const byDoi = new Map();
+    const byTitle = new Map();
+
+    items.forEach((item) => {
+      if (!item) return;
+      const doi = String(item.doi || "").toLowerCase();
+      const titleKey = normalizeTitle(item.title || item.citation || "");
+      if (doi) byDoi.set(doi, item.cited_by ?? item.citations ?? item.citedBy ?? item.count ?? "");
+      if (titleKey) byTitle.set(titleKey, item.cited_by ?? item.citations ?? item.citedBy ?? item.count ?? "");
+    });
+
+    records.forEach((record) => {
+      const doiKey = String(record.doi || "").toLowerCase();
+      if (doiKey && byDoi.has(doiKey)) {
+        record.scholar_citations = byDoi.get(doiKey);
+        return;
+      }
+      const titleKey = normalizeTitle(record.citation || "");
+      if (titleKey && byTitle.has(titleKey)) {
+        record.scholar_citations = byTitle.get(titleKey);
+      }
+    });
+
+    return records;
+  }
+
+  function computeYearlyStats(records) {
+    const stats = {};
+    records.forEach((r) => {
+      const year = r.year;
+      if (!year) return;
+      if (!stats[year]) {
+        stats[year] = {
+          records_total: 0,
+          publications_list_a: 0,
+          publications_list_b: 0,
+          journal_articles_total: 0,
+          conference_contributions_total: 0,
+          articles_and_conferences_total: 0,
+          mnicsw_points: 0,
+          sum_impact_factor: 0,
+        };
+      }
+      const entry = stats[year];
+      const isListA = r.category === "A";
+      const isListB = r.category === "B";
+      const isConference = r.record_type === "conference_contribution" || r.category === "Conference";
+      entry.records_total += 1;
+      if (isListA) entry.publications_list_a += 1;
+      if (isListB) entry.publications_list_b += 1;
+      if (isListA || isListB) entry.journal_articles_total += 1;
+      if (isConference) entry.conference_contributions_total += 1;
+      if (isConference || isListA || isListB) entry.articles_and_conferences_total += 1;
+      entry.mnicsw_points += toNumber(r.mnicsw_points);
+      entry.sum_impact_factor += toNumber(r.impact_factor);
+    });
+    return stats;
+  }
+
+  function setupMetricsVisualization(records) {
+    const viz = $("#metricsViz");
+    const vizTitle = $("#metricsVizTitle");
+    const vizSubtitle = $("#metricsVizSubtitle");
+    const vizChart = $("#metricsVizChart");
+    const vizLegend = $("#metricsVizLegend");
+    const closeBtn = $("#metricsVizClose");
+
+    const yearlyStats = computeYearlyStats(records);
+    const years = Object.keys(yearlyStats).sort((a, b) => Number(a) - Number(b));
+
+    const metricConfig = {
+      citations: { seriesKey: "records_total", subtitle: "Publication output per year (context for citation metrics)." },
+      h_index: { seriesKey: "records_total", subtitle: "Publication output per year (context for h-index)." },
+      mnicsw_points: { seriesKey: "mnicsw_points", subtitle: "MNiSW points accumulated per year." },
+      sum_impact_factor: { seriesKey: "sum_impact_factor", subtitle: "Sum of journal impact factors per year." },
+      publications_list_a: { seriesKey: "publications_list_a", subtitle: "List A journal articles per year." },
+      publications_list_b: { seriesKey: "publications_list_b", subtitle: "List B publications per year." },
+      journal_articles_total: { seriesKey: "journal_articles_total", subtitle: "List A + List B journal articles per year." },
+      articles_and_conferences_total: { seriesKey: "articles_and_conferences_total", subtitle: "Journal articles plus conference contributions per year." },
+      conference_contributions_total: { seriesKey: "conference_contributions_total", subtitle: "Conference contributions per year." },
+    };
+
+    function renderChart(metricKey, label) {
+      const config = metricConfig[metricKey];
+      if (!config) return;
+      const data = years.map((year) => ({
+        year,
+        value: yearlyStats[year]?.[config.seriesKey] ?? 0,
+      }));
+      const maxValue = Math.max(1, ...data.map((d) => d.value));
+      const total = data.reduce((sum, d) => sum + d.value, 0);
+      const peak = data.reduce((best, d) => (d.value >= best.value ? d : best), data[0] || { year: "—", value: 0 });
+
+      vizTitle.textContent = label;
+      vizSubtitle.textContent = config.subtitle;
+      vizChart.innerHTML = `
+        <div class="viz-bars">
+          ${data
+            .map(
+              (d) => `
+                <div class="viz-bar ${d.year === peak.year ? "is-peak" : ""}" style="--value:${d.value}; --max:${maxValue}" title="${d.year}: ${fmtNumber(d.value)}">
+                  <span class="viz-bar-value">${fmtNumber(d.value)}</span>
+                  <span class="viz-bar-year">${d.year}</span>
+                </div>
+              `
+            )
+            .join("")}
+        </div>
+      `;
+      vizLegend.textContent = `Total: ${fmtNumber(total)} · Peak year: ${peak.year} (${fmtNumber(peak.value)})`;
+      viz.removeAttribute("hidden");
+      viz.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
+    function handleCardActivate(event) {
+      const card = event.currentTarget;
+      const metricKey = card.dataset.metricKey;
+      const metricLabel = card.dataset.metricLabel || "Metric trend";
+      renderChart(metricKey, metricLabel);
+    }
+
+    const cards = Array.from(document.querySelectorAll("#metricsGrid .card"));
+    cards.forEach((card) => {
+      card.addEventListener("click", handleCardActivate);
+      card.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          handleCardActivate(event);
+        }
+      });
+    });
+
+    closeBtn.addEventListener("click", () => {
+      viz.setAttribute("hidden", "true");
+    });
   }
 
   function renderList(containerEl, records) {
@@ -339,36 +509,53 @@
     $("#printBtn").addEventListener("click", () => window.print());
   }
 
+  function setupRefresh() {
+    const btn = $("#refreshDataBtn");
+    if (!btn) return;
+    btn.addEventListener("click", () => {
+      const url = new URL(window.location.href);
+      url.searchParams.set("refresh", Date.now().toString());
+      window.location.replace(url.toString());
+    });
+  }
+
   async function init() {
     setupTheme();
     setupPrint();
+    setupRefresh();
 
     $("#yearNow").textContent = new Date().getFullYear();
 
     try {
-      const [profile, summary, records] = await Promise.all([
+      const [profile, summary, records, citations] = await Promise.all([
         readJSON("data/profile.json"),
         readJSON("data/summary.json"),
         readJSON("data/publications.json"),
+        readOptionalJSON("data/scholar_publications.json"),
       ]);
 
       state.profile = profile;
       state.summary = summary;
-      state.records = records;
+      state.records = mergeScholarCitations(records, citations);
 
       renderProfile(profile);
 
+      const totals = summary?.totals || {};
+      const listA = toNumber(totals.publications_list_a);
+      const listB = toNumber(totals.publications_list_b);
+      const confTotal = toNumber(totals.conference_contributions_total);
+      const journalTotal = listA + listB;
       const derivedTotals = {
-        publications_list_b: records.filter((r) => r.category === "B").length,
-        journal_articles_total: records.filter((r) => r.record_type === "journal_article").length,
-        articles_and_conferences_total: records.filter((r) => r.record_type === "journal_article").length
-          + records.filter((r) => r.record_type === "conference_contribution" || r.category === "Conference").length,
+        publications_list_b: listB,
+        journal_articles_total: journalTotal,
+        articles_and_conferences_total: journalTotal + confTotal,
       };
 
       renderMetrics(summary, derivedTotals);
+      setupMetricsVisualization(state.records);
 
-      const pubRecords = records.filter(r => r.record_type !== "conference_contribution" && r.category !== "Conference");
-      const confRecords = records.filter(r => r.record_type === "conference_contribution" || r.category === "Conference");
+      const pubRecords = state.records.filter(r => r.record_type !== "conference_contribution" && r.category !== "Conference");
+      const confRecords = state.records.filter(r => r.record_type === "conference_contribution" || r.category === "Conference");
 
       setupPublicationsUI(pubRecords);
       setupConferencesUI(confRecords);
