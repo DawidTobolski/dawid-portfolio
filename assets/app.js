@@ -99,12 +99,13 @@
     renderExternalLinks(profile);
   }
 
-  function renderMetrics(summary) {
+  function renderMetrics(summary, derivedTotals = {}) {
     const grid = $("#metricsGrid");
     grid.innerHTML = "";
 
     const totals = summary?.totals || {};
     const scholar = summary?.scholar_metrics || {};
+    const derived = derivedTotals || {};
 
     const cards = [
       { label: "Google Scholar citations", value: fmtNumber(scholar.citations_all), hint: `Last updated: ${scholar.last_updated || "—"}` },
@@ -112,6 +113,9 @@
       { label: "MNiSW points (computed)", value: fmtNumber(totals.mnicsw_points), hint: "Computed from publications.csv" },
       { label: "Sum of journal impact factors (computed)", value: fmtNumber(totals.sum_impact_factor), hint: "Computed from publications.csv" },
       { label: "Publications (List A)", value: fmtNumber(totals.publications_list_a), hint: "Journal articles with IF" },
+      { label: "Publications (List B)", value: fmtNumber(derived.publications_list_b ?? totals.publications_list_b), hint: "Professional articles & case reports" },
+      { label: "Journal articles (total)", value: fmtNumber(derived.journal_articles_total), hint: "All journal articles" },
+      { label: "Articles + conferences (total)", value: fmtNumber(derived.articles_and_conferences_total), hint: "Journal articles + conference contributions" },
       { label: "Conference contributions (total)", value: fmtNumber(totals.conference_contributions_total), hint: `Oral: ${fmtNumber(totals.conference_oral_presentations)} · Poster: ${fmtNumber(totals.conference_posters)}` },
     ];
 
@@ -196,7 +200,6 @@
     const resetEl = $("#pubReset");
     const listEl = $("#pubList");
     const countEl = $("#pubCount");
-
     const years = Array.from(new Set(pubRecords.map(r => r.year).filter(Boolean))).sort((a,b) => Number(b)-Number(a));
     const cats = Array.from(new Set(pubRecords.map(r => r.category).filter(Boolean))).sort();
     const types = Array.from(new Set(pubRecords.map(r => r.subtype).filter(Boolean))).sort();
@@ -222,7 +225,21 @@
         return true;
       });
 
-      renderList(listEl, filtered);
+      const categoryPriority = (record) => {
+        if (record.category === "A") return 0;
+        if (record.category === "B") return 1;
+        return 2;
+      };
+
+      const sorted = filtered.slice().sort((a, b) => {
+        const yearDiff = Number(b.year || 0) - Number(a.year || 0);
+        if (yearDiff !== 0) return yearDiff;
+        const catDiff = categoryPriority(a) - categoryPriority(b);
+        if (catDiff !== 0) return catDiff;
+        return String(a.citation || "").localeCompare(String(b.citation || ""), "pl", { sensitivity: "base" });
+      });
+
+      renderList(listEl, sorted);
       countEl.textContent = `${filtered.length} record(s) shown.`;
     }
 
@@ -314,20 +331,27 @@
     $("#yearNow").textContent = new Date().getFullYear();
 
     try {
-      const [profile, summary] = await Promise.all([
+      const [profile, summary, records] = await Promise.all([
         readJSON("data/profile.json"),
         readJSON("data/summary.json"),
+        readJSON("data/publications.json"),
       ]);
 
       state.profile = profile;
       state.summary = summary;
+      state.records = records;
 
       renderProfile(profile);
-      renderMetrics(summary);
 
-      // Load records
-      const records = await readJSON("data/publications.json");
-      state.records = records;
+      const journalArticles = records.filter((r) => r.record_type === "journal_article");
+      const derivedTotals = {
+        publications_list_b: records.filter((r) => r.category === "B").length,
+        journal_articles_total: journalArticles.length,
+        articles_and_conferences_total: journalArticles.length
+          + records.filter((r) => r.record_type === "conference_contribution" || r.category === "Conference").length,
+      };
+
+      renderMetrics(summary, derivedTotals);
 
       const pubRecords = records.filter(r => r.record_type !== "conference_contribution" && r.category !== "Conference");
       const confRecords = records.filter(r => r.record_type === "conference_contribution" || r.category === "Conference");
