@@ -1,0 +1,9 @@
+# Python 3.13 note:
+# pandas 2.2.2 does not ship Windows wheels for CPython 3.13, which forces a source build.
+# pandas 2.2.3+ ships CPython 3.13 wheels.
+pandas>=2.2.3,<3.0
+
+# Use a recent ReportLab that declares support for Python 3.13.
+reportlab>=4.4.0,<5.0
+python-docx==1.1.2
+requests==2.32.3

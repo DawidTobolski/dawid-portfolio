@@ -1,0 +1,34 @@
+{
+  "computed_from": "D:/OneDrive/Współpraca/Dawid Tobolski - publikacje/dawid-portfolio-polish-chars-fix/data/publications.csv",
+  "generated_on": "07.02.2026",
+  "totals": {
+    "mnicsw_points": 5107,
+    "sum_impact_factor": 115.418,
+    "records_total": 97,
+    "publications_list_a": 42,
+    "publications_list_b": 18,
+    "book_chapters": 1,
+    "conference_contributions_total": 36,
+    "conference_oral_presentations": 6,
+    "conference_posters": 8,
+    "conference_type_unspecified": 22
+  },
+  "scholar_metrics": {
+    "citations_all": 223,
+    "h_index_all": 8,
+    "i10_index_all": "",
+    "last_updated": "07.02.2026",
+    "profile_url": "https://scholar.google.com/citations?hl=en&user=Rj58qXIAAAAJ"
+  },
+  "year_counts": {
+    "2025": 26,
+    "2024": 24,
+    "2023": 8,
+    "2022": 10,
+    "2021": 7,
+    "2020": 3,
+    "2019": 7,
+    "2018": 8,
+    "2017": 4
+  }
+}

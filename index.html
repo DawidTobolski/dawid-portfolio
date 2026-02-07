@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Dawid Tobolski | Scientific Portfolio</title>
+  <meta name="description" content="Scientific portfolio, publications, conference contributions, and auto-generated CV."/>
+  <link rel="stylesheet" href="assets/styles.css"/>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#top" aria-label="Home">
+        <span class="brand-mark">DT</span>
+        <span class="brand-text">Scientific Portfolio</span>
+      </a>
+
+      <nav class="nav">
+        <a href="#metrics">Metrics</a>
+        <a href="#publications">Publications</a>
+        <a href="#conferences">Conferences</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <div class="header-actions">
+        <button id="themeToggle" class="btn btn-ghost" type="button" aria-label="Toggle theme">Theme</button>
+        <a id="cvBtnTop" class="btn btn-primary" href="assets/Dawid-Tobolski-Scientific-CV.pdf" target="_blank" rel="noopener">Download CV (PDF)</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-inner">
+        <div class="hero-left">
+          <p class="kicker">Academic CV · Publications · Conference track record</p>
+          <h1 id="name">Dawid Tobolski</h1>
+          <p class="subtitle">
+            <span id="role">Assistant Professor</span> ·
+            <span id="affiliation">Warsaw University of Life Sciences (SGGW)</span>
+          </p>
+
+          <p class="hero-contact">
+            <a id="emailLink" href="mailto:dawid_tobolski@sggw.edu.pl">dawid_tobolski@sggw.edu.pl</a>
+            <span class="sep">·</span>
+            <span id="location">Warsaw, Poland</span>
+          </p>
+
+          <div class="hero-links" id="externalLinks"></div>
+
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="assets/Dawid-Tobolski-Scientific-CV.pdf" target="_blank" rel="noopener">Download CV (PDF)</a>
+            <a class="btn btn-ghost" href="#publications">Browse publications</a>
+            <button class="btn btn-ghost" type="button" id="printBtn">Print / Save as PDF</button>
+          </div>
+
+          <p class="fineprint" id="dataNote">
+            Data are loaded from <code>data/publications.csv</code> (manual edits) and computed build artifacts (<code>data/*.json</code>, CV PDF/DOCX).
+          </p>
+        </div>
+
+        <div class="hero-right">
+          <div class="panel">
+            <h2>Research areas</h2>
+            <ul class="chips">
+              <li>Large animal reproduction</li>
+              <li>Dairy cattle uterine health</li>
+              <li>Equine reproduction</li>
+              <li>Omics (RNA-seq, scRNA-seq, metabolomics)</li>
+              <li>Biostatistics & data-driven diagnostics</li>
+            </ul>
+
+            <div class="panel-divider"></div>
+
+            <h2>Quick links</h2>
+            <div class="quicklinks" id="quickLinks"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="metrics" class="section">
+      <div class="container">
+        <div class="section-head">
+          <h2>Key metrics</h2>
+          <p class="muted">Google Scholar values are updated automatically (scheduled). Publication-based values are computed from the CSV database.</p>
+        </div>
+
+        <div class="grid metrics-grid" id="metricsGrid">
+          <!-- populated by JS -->
+        </div>
+
+        <p class="fineprint" id="metricsUpdated"></p>
+      </div>
+    </section>
+
+    <section id="publications" class="section">
+      <div class="container">
+        <div class="section-head">
+          <h2>Publications</h2>
+          <p class="muted">The list below is generated from <code>data/publications.csv</code>. Add or edit records in the CSV to update the website and CV.</p>
+        </div>
+
+        <div class="toolbar">
+          <input id="pubSearch" class="input" type="search" placeholder="Search title / journal / authors (free-text)" autocomplete="off"/>
+          <select id="pubYear" class="select"></select>
+          <select id="pubCategory" class="select"></select>
+          <select id="pubType" class="select"></select>
+          <button id="pubReset" class="btn btn-ghost" type="button">Reset</button>
+        </div>
+
+        <div class="list" id="pubList" aria-live="polite"></div>
+        <p class="fineprint" id="pubCount"></p>
+      </div>
+    </section>
+
+    <section id="conferences" class="section">
+      <div class="container">
+        <div class="section-head">
+          <h2>Conference contributions</h2>
+          <p class="muted">Conference records are stored in the same CSV database. Where presentation type is missing, it is listed as “type not specified”.</p>
+        </div>
+
+        <div class="toolbar">
+          <input id="confSearch" class="input" type="search" placeholder="Search conference records" autocomplete="off"/>
+          <select id="confYear" class="select"></select>
+          <select id="confSubtype" class="select"></select>
+          <button id="confReset" class="btn btn-ghost" type="button">Reset</button>
+        </div>
+
+        <div class="list" id="confList" aria-live="polite"></div>
+        <p class="fineprint" id="confCount"></p>
+      </div>
+    </section>
+
+    <section id="contact" class="section">
+      <div class="container">
+        <div class="section-head">
+          <h2>Contact</h2>
+          <p class="muted">For collaboration, peer review, consulting, or data-driven veterinary research projects.</p>
+        </div>
+
+        <div class="contact-card">
+          <div>
+            <p class="contact-name" id="contactName">Dawid Tobolski</p>
+            <p class="contact-meta" id="contactAffiliation">Warsaw University of Life Sciences (SGGW)</p>
+          </div>
+          <div class="contact-actions">
+            <a id="contactEmailBtn" class="btn btn-primary" href="mailto:dawid_tobolski@sggw.edu.pl">Email</a>
+            <a class="btn btn-ghost" href="assets/Dawid-Tobolski-Scientific-CV.pdf" target="_blank" rel="noopener">CV (PDF)</a>
+          </div>
+        </div>
+
+        <p class="fineprint" id="buildInfo"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© <span id="yearNow"></span> <span id="footerName">Dawid Tobolski</span>. Built as a static site.</p>
+      <p class="muted">Last build: <span id="lastBuild">—</span></p>
+    </div>
+  </footer>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>

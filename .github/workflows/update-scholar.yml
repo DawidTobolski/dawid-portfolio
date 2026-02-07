@@ -1,0 +1,53 @@
+name: Update Google Scholar metrics (daily)
+
+on:
+  schedule:
+    # Runs daily (UTC). Adjust as needed.
+    - cron: "15 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-metrics:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Fetch Scholar metrics (SerpApi)
+        env:
+          SERPAPI_API_KEY: ${{ secrets.SERPAPI_API_KEY }}
+          SCHOLAR_AUTHOR_ID: "Rj58qXIAAAAJ"
+          SCHOLAR_HL: "en"
+        run: |
+          python scripts/fetch_scholar_metrics_serpapi.py
+
+      - name: Rebuild CV + summary (with updated metrics)
+        run: |
+          python scripts/build_site.py
+
+      - name: Commit & push (if changed)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git add data/metrics.json data/summary.json assets/Dawid-Tobolski-Scientific-CV.pdf assets/Dawid-Tobolski-Scientific-CV.docx data/publications.json
+            git commit -m "Automated Scholar metrics update [skip ci]"
+            git push
+          else
+            echo "No changes to commit."
+          fi
