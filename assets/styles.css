@@ -232,6 +232,17 @@ h1 {
   grid-template-columns: repeat(3, 1fr);
 }
 
+.metrics-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.metrics-refresh-note {
+  font-size: 13px;
+}
+
 .metrics-grid .card {
   cursor: pointer;
   transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;

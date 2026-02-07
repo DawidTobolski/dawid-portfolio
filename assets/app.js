@@ -509,9 +509,20 @@
     $("#printBtn").addEventListener("click", () => window.print());
   }
 
+  function setupRefresh() {
+    const btn = $("#refreshDataBtn");
+    if (!btn) return;
+    btn.addEventListener("click", () => {
+      const url = new URL(window.location.href);
+      url.searchParams.set("refresh", Date.now().toString());
+      window.location.replace(url.toString());
+    });
+  }
+
   async function init() {
     setupTheme();
     setupPrint();
+    setupRefresh();
 
     $("#yearNow").textContent = new Date().getFullYear();
 
