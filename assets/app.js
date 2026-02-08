@@ -240,6 +240,7 @@
           articles_and_conferences_total: 0,
           mnicsw_points: 0,
           sum_impact_factor: 0,
+          citations_total: 0,
         };
       }
       const entry = stats[year];
@@ -254,6 +255,7 @@
       if (isConference || isListA || isListB) entry.articles_and_conferences_total += 1;
       entry.mnicsw_points += toNumber(r.mnicsw_points);
       entry.sum_impact_factor += toNumber(r.impact_factor);
+      entry.citations_total += toNumber(r.scholar_citations);
     });
     return stats;
   }
@@ -270,7 +272,7 @@
     const years = Object.keys(yearlyStats).sort((a, b) => Number(a) - Number(b));
 
     const metricConfig = {
-      citations: { seriesKey: "records_total", subtitle: "Publication output per year (context for citation metrics)." },
+      citations: { seriesKey: "citations_total", subtitle: "Google Scholar citations per publication year." },
       h_index: { seriesKey: "records_total", subtitle: "Publication output per year (context for h-index)." },
       mnicsw_points: { seriesKey: "mnicsw_points", subtitle: "MNiSW points accumulated per year." },
       sum_impact_factor: { seriesKey: "sum_impact_factor", subtitle: "Sum of journal impact factors per year." },
