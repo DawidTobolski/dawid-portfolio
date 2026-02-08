@@ -16,7 +16,7 @@ A modern, static landing page that renders a scientific CV from a single CSV dat
 
 File: `data/publications.csv`
 
-Encoding note (Polish diacritics): Save the CSV as **UTF-8** (or UTF-8 with BOM) to preserve names such as “Wójcik”, “Żarczyńska”, and “Wiszniewska-Łaszczych”. When exporting from Microsoft Excel on Windows, CSV may be saved as **Windows-1250 (cp1250)** and/or use a **semicolon** delimiter. The build script is configured to auto-detect the delimiter and to try UTF-8, cp1250, and ISO-8859-2.
+Encoding note (Polish diacritics): Save the CSV as **UTF-8** (or UTF-8 with BOM). When exporting from Microsoft Excel on Windows, CSV may be saved as **Windows-1250 (cp1250)** and/or use a **semicolon** delimiter. The build script is configured to auto-detect the delimiter and to try UTF-8, cp1250, and ISO-8859-2.
 
 ### Columns
 
