@@ -150,8 +150,8 @@ def compute_summary(df: pd.DataFrame, metrics: Dict[str, Any]) -> Dict[str, Any]
     total_if = float(pd.Series(df["impact_factor_num"]).dropna().sum())
 
     is_list_a = df["category"].str.upper().eq("A")
-    is_list_b = df["category"].str.upper().eq("B")
     is_chapter = df["record_type"].eq("book_chapter") | df["category"].str.lower().str.contains("book chapter")
+    is_list_b = df["category"].str.upper().eq("B") | is_chapter
     is_conf = df["record_type"].eq("conference_contribution") | df["category"].str.lower().eq("conference")
 
     # Conference breakdown (best-effort)
