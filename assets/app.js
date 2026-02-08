@@ -135,11 +135,11 @@
       { key: "h_index", label: "Google Scholar h-index", value: fmtNumber(scholar.h_index_all), hint: "Source: Google Scholar" },
       { key: "mnicsw_points", label: "MNiSW points (computed)", value: fmtNumber(totals.mnicsw_points), hint: "Computed from publications.csv" },
       { key: "sum_impact_factor", label: "Sum of journal impact factors (computed)", value: fmtNumber(totals.sum_impact_factor), hint: "Computed from publications.csv" },
-      { key: "publications_list_a", label: "Publications (List A)", value: fmtNumber(totals.publications_list_a), hint: "Journal articles with IF" },
-      { key: "publications_list_b", label: "Publications (List B)", value: fmtNumber(derived.publications_list_b), hint: "Professional articles & case reports" },
-      { key: "journal_articles_total", label: "Journal articles (total)", value: fmtNumber(derived.journal_articles_total), hint: "Publications (List A + B)" },
-      { key: "articles_and_conferences_total", label: "Articles + conferences (total)", value: fmtNumber(derived.articles_and_conferences_total), hint: "Journal articles + conference contributions" },
+      { key: "journal_articles_total", label: "Journal articles (total)", value: fmtNumber(derived.journal_articles_total), hint: "Publications (List A + B, incl. book chapters)" },
+      { key: "publications_list_a", label: "Publications (List A)", value: fmtNumber(derived.publications_list_a), hint: "Journal articles with IF" },
+      { key: "publications_list_b", label: "Publications (List B)", value: fmtNumber(derived.publications_list_b), hint: "Professional articles, case reports & book chapters" },
       { key: "conference_contributions_total", label: "Conference contributions (total)", value: fmtNumber(totals.conference_contributions_total), hint: `Oral: ${fmtNumber(totals.conference_oral_presentations)} · Poster: ${fmtNumber(totals.conference_posters)}` },
+      { key: "articles_and_conferences_total", label: "Articles + conferences (total)", value: fmtNumber(derived.articles_and_conferences_total), hint: "Journal articles + conference contributions" },
     ];
 
     cards.forEach((c) => {
@@ -245,7 +245,8 @@
       }
       const entry = stats[year];
       const isListA = r.category === "A";
-      const isListB = r.category === "B";
+      const isBookChapter = r.record_type === "book_chapter" || String(r.category || "").toLowerCase().includes("book chapter");
+      const isListB = r.category === "B" || isBookChapter;
       const isConference = r.record_type === "conference_contribution" || r.category === "Conference";
       entry.records_total += 1;
       if (isListA) entry.publications_list_a += 1;
@@ -266,21 +267,83 @@
     const vizSubtitle = $("#metricsVizSubtitle");
     const vizChart = $("#metricsVizChart");
     const vizLegend = $("#metricsVizLegend");
+    const vizCalc = $("#metricsVizCalc");
     const closeBtn = $("#metricsVizClose");
 
     const yearlyStats = computeYearlyStats(records);
     const years = Object.keys(yearlyStats).sort((a, b) => Number(a) - Number(b));
 
     const metricConfig = {
-      citations: { seriesKey: "citations_total", subtitle: "Google Scholar citations per publication year." },
-      h_index: { seriesKey: "records_total", subtitle: "Publication output per year (context for h-index)." },
-      mnicsw_points: { seriesKey: "mnicsw_points", subtitle: "MNiSW points accumulated per year." },
-      sum_impact_factor: { seriesKey: "sum_impact_factor", subtitle: "Sum of journal impact factors per year." },
-      publications_list_a: { seriesKey: "publications_list_a", subtitle: "List A journal articles per year." },
-      publications_list_b: { seriesKey: "publications_list_b", subtitle: "List B publications per year." },
-      journal_articles_total: { seriesKey: "journal_articles_total", subtitle: "List A + List B journal articles per year." },
-      articles_and_conferences_total: { seriesKey: "articles_and_conferences_total", subtitle: "Journal articles plus conference contributions per year." },
-      conference_contributions_total: { seriesKey: "conference_contributions_total", subtitle: "Conference contributions per year." },
+      citations: {
+        seriesKey: "citations_total",
+        subtitle: "Google Scholar citations per publication year.",
+        calculation: [
+          "For each publication year, sum the Google Scholar citation counts attached to each record.",
+          "Citation counts are matched by DOI or normalized title and aggregated per year.",
+        ],
+      },
+      h_index: {
+        seriesKey: "records_total",
+        subtitle: "Publication output per year (context for h-index).",
+        calculation: [
+          "The h-index value itself comes from Google Scholar.",
+          "The yearly chart shows how many publications are listed in each year as context.",
+        ],
+      },
+      mnicsw_points: {
+        seriesKey: "mnicsw_points",
+        subtitle: "MNiSW points accumulated per year.",
+        calculation: [
+          "For each year, sum the MNiSW points from publications.csv.",
+          "Entries without points are treated as 0.",
+        ],
+      },
+      sum_impact_factor: {
+        seriesKey: "sum_impact_factor",
+        subtitle: "Sum of journal impact factors per year.",
+        calculation: [
+          "For each year, sum the Impact Factor values from publications.csv.",
+          "Only journal entries with Impact Factor values contribute to the total.",
+        ],
+      },
+      publications_list_a: {
+        seriesKey: "publications_list_a",
+        subtitle: "List A journal articles per year.",
+        calculation: [
+          "Count publications tagged as category A.",
+          "Each row in publications.csv counts as one publication.",
+        ],
+      },
+      publications_list_b: {
+        seriesKey: "publications_list_b",
+        subtitle: "List B publications per year.",
+        calculation: [
+          "Count publications tagged as category B.",
+          "Book chapters are included in List B totals.",
+        ],
+      },
+      journal_articles_total: {
+        seriesKey: "journal_articles_total",
+        subtitle: "List A + List B journal articles per year.",
+        calculation: [
+          "Total journal articles = List A + List B (including book chapters).",
+        ],
+      },
+      articles_and_conferences_total: {
+        seriesKey: "articles_and_conferences_total",
+        subtitle: "Journal articles plus conference contributions per year.",
+        calculation: [
+          "Articles + conferences = journal articles (List A + B) + conference contributions.",
+        ],
+      },
+      conference_contributions_total: {
+        seriesKey: "conference_contributions_total",
+        subtitle: "Conference contributions per year.",
+        calculation: [
+          "Count entries marked as conference contributions.",
+          "Oral and poster presentations are included.",
+        ],
+      },
     };
 
     function renderChart(metricKey, label) {
@@ -311,6 +374,9 @@
         </div>
       `;
       vizLegend.textContent = `Total: ${fmtNumber(total)} · Peak year: ${peak.year} (${fmtNumber(peak.value)})`;
+      vizCalc.innerHTML = (config.calculation || [])
+        .map((line) => `<li>${escapeHTML(line)}</li>`)
+        .join("");
       viz.removeAttribute("hidden");
       viz.scrollIntoView({ behavior: "smooth", block: "center" });
     }
@@ -543,11 +609,15 @@
       renderProfile(profile);
 
       const totals = summary?.totals || {};
-      const listA = toNumber(totals.publications_list_a);
-      const listB = toNumber(totals.publications_list_b);
-      const confTotal = toNumber(totals.conference_contributions_total);
+      const listA = state.records.filter((r) => r.category === "A").length;
+      const listB = state.records.filter((r) => {
+        const isBookChapter = r.record_type === "book_chapter" || String(r.category || "").toLowerCase().includes("book chapter");
+        return r.category === "B" || isBookChapter;
+      }).length;
+      const confTotal = state.records.filter((r) => r.record_type === "conference_contribution" || r.category === "Conference").length;
       const journalTotal = listA + listB;
       const derivedTotals = {
+        publications_list_a: listA,
         publications_list_b: listB,
         journal_articles_total: journalTotal,
         articles_and_conferences_total: journalTotal + confTotal,
