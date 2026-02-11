@@ -50,6 +50,26 @@
       .replaceAll("'", "&#039;");
   }
 
+  function formatCitation(citation) {
+    const source = String(citation || "");
+    if (!source) return "";
+
+    const authorPattern = /Tobolski,\s*D\./gi;
+    let output = "";
+    let lastIndex = 0;
+
+    for (const match of source.matchAll(authorPattern)) {
+      const start = match.index ?? 0;
+      const end = start + match[0].length;
+      output += escapeHTML(source.slice(lastIndex, start));
+      output += `<strong>${escapeHTML(match[0])}</strong>`;
+      lastIndex = end;
+    }
+
+    output += escapeHTML(source.slice(lastIndex));
+    return output;
+  }
+
   function normalizeTitle(value) {
     return String(value || "")
       .toLowerCase()
@@ -423,7 +443,7 @@
         <div class="item-top">
           <div class="badges">${badgesHtml}</div>
         </div>
-        <p class="citation">${escapeHTML(r.citation || "")}</p>
+        <p class="citation">${formatCitation(r.citation)}</p>
         ${metaHtml ? `<p class="meta">${metaHtml}</p>` : ""}
       `;
       containerEl.appendChild(item);

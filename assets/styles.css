@@ -423,6 +423,33 @@ h1 {
   margin: 8px 0 0;
 }
 
+
+.activity-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.activity-card {
+  background: linear-gradient(155deg, color-mix(in srgb, var(--panel) 92%, transparent), color-mix(in srgb, var(--brand) 10%, var(--panel)));
+  border: 1px solid color-mix(in srgb, var(--brand) 22%, var(--border));
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+}
+
+.activity-card h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  letter-spacing: -0.1px;
+}
+
+.activity-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
 .toolbar {
   display: grid;
   grid-template-columns: 1.6fr 0.5fr 0.5fr 0.9fr 0.6fr auto;
@@ -525,6 +552,11 @@ h1 {
   font-size: 14px;
 }
 
+.citation strong {
+  font-weight: 800;
+  color: color-mix(in srgb, var(--brand) 78%, var(--text));
+}
+
 .meta {
   margin: 8px 0 0;
   color: var(--muted);
@@ -618,6 +650,7 @@ code {
   .hero-inner { grid-template-columns: 1fr; }
   h1 { font-size: 38px; }
   .metrics-grid { grid-template-columns: 1fr 1fr; }
+  .activity-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 720px) {
