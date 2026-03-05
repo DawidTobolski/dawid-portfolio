@@ -1,6 +1,6 @@
 {
   "computed_from": "/home/runner/work/dawid-portfolio/dawid-portfolio/data/publications.csv",
-  "generated_on": "04.03.2026",
+  "generated_on": "05.03.2026",
   "totals": {
     "mnicsw_points": 5117,
     "sum_impact_factor": 115.418,
@@ -17,7 +17,7 @@
     "citations_all": 276,
     "h_index_all": 9,
     "i10_index_all": 8,
-    "last_updated": "04.03.2026",
+    "last_updated": "05.03.2026",
     "profile_url": "https://scholar.google.com/citations?hl=en&user=Rj58qXIAAAAJ"
   },
   "year_counts": {
