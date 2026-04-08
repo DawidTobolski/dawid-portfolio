@@ -153,6 +153,7 @@ h1 {
   display: inline-flex;
   gap: 8px;
   align-items: center;
+  justify-content: center;
   padding: 7px 10px;
   border-radius: 999px;
   border: 1px solid var(--border);
@@ -160,6 +161,11 @@ h1 {
   text-decoration: none;
   background: color-mix(in srgb, var(--panel) 86%, transparent);
   font-size: 13px;
+  max-width: 100%;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-align: center;
 }
 
 .link-pill:hover {
@@ -171,6 +177,11 @@ h1 {
   flex-wrap: wrap;
   gap: 10px;
   margin: 18px 0 0;
+}
+
+.hero-cta .btn {
+  flex: 1 1 220px;
+  min-width: 0;
 }
 
 .panel {
@@ -655,6 +666,11 @@ h1 {
   font-weight: 650;
   font-size: 13px;
   cursor: pointer;
+  max-width: 100%;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-align: center;
 }
 
 .btn:hover { border-color: color-mix(in srgb, var(--brand) 40%, var(--border)); }
@@ -729,4 +745,6 @@ code {
   .metrics-grid { grid-template-columns: 1fr; }
   .cv-links { grid-template-columns: 1fr; }
   .contact-card { flex-direction: column; align-items: flex-start; }
+  .header-actions { width: 100%; flex-wrap: wrap; }
+  .header-actions .btn { flex: 1 1 160px; }
 }
