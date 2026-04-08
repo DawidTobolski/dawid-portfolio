@@ -40,12 +40,19 @@ body {
 }
 
 .site-header {
-  position: sticky;
+  position: fixed;
+  left: 0;
+  right: 0;
   top: 0;
+  width: 100%;
   z-index: 50;
   backdrop-filter: blur(10px);
   background: color-mix(in srgb, var(--bg) 75%, transparent);
   border-bottom: 1px solid var(--border);
+}
+
+main {
+  padding-top: 74px;
 }
 
 .header-inner {
