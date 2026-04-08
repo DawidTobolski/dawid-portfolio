@@ -327,25 +327,30 @@ def generate_cv_pdf(profile: Dict[str, Any], summary: Dict[str, Any], df: pd.Dat
     scholar = summary.get("scholar_metrics", {})
 
     summary_rows = [
-        ["MNiSW points (computed)", str(totals.get("mnicsw_points", ""))],
-        ["Sum of journal impact factors (computed)", str(totals.get("sum_impact_factor", ""))],
-        ["Publications (List A)", str(totals.get("publications_list_a", ""))],
-        ["Other publications (List B)", str(totals.get("publications_list_b", ""))],
-        ["Book chapters", str(totals.get("book_chapters", ""))],
-        ["Conference contributions (total)", str(totals.get("conference_contributions_total", ""))],
-        ["Google Scholar citations", str(scholar.get("citations_all", ""))],
-        ["Google Scholar h-index", str(scholar.get("h_index_all", ""))],
-        ["Google Scholar last updated", str(scholar.get("last_updated", ""))],
+        [Paragraph("<b>Metric</b>", styles["Small"]), Paragraph("<b>Value</b>", styles["Small"])],
+        [Paragraph(_rl_escape("MNiSW points (computed)"), styles["Small"]), Paragraph(_rl_escape(str(totals.get("mnicsw_points", ""))), styles["Small"])],
+        [Paragraph(_rl_escape("Sum of journal impact factors (computed)"), styles["Small"]), Paragraph(_rl_escape(str(totals.get("sum_impact_factor", ""))), styles["Small"])],
+        [Paragraph(_rl_escape("Publications (List A)"), styles["Small"]), Paragraph(_rl_escape(str(totals.get("publications_list_a", ""))), styles["Small"])],
+        [Paragraph(_rl_escape("Other publications (List B)"), styles["Small"]), Paragraph(_rl_escape(str(totals.get("publications_list_b", ""))), styles["Small"])],
+        [Paragraph(_rl_escape("Book chapters"), styles["Small"]), Paragraph(_rl_escape(str(totals.get("book_chapters", ""))), styles["Small"])],
+        [Paragraph(_rl_escape("Conference contributions (total)"), styles["Small"]), Paragraph(_rl_escape(str(totals.get("conference_contributions_total", ""))), styles["Small"])],
+        [Paragraph(_rl_escape("Google Scholar citations"), styles["Small"]), Paragraph(_rl_escape(str(scholar.get("citations_all", ""))), styles["Small"])],
+        [Paragraph(_rl_escape("Google Scholar h-index"), styles["Small"]), Paragraph(_rl_escape(str(scholar.get("h_index_all", ""))), styles["Small"])],
+        [Paragraph(_rl_escape("Google Scholar last updated"), styles["Small"]), Paragraph(_rl_escape(str(scholar.get("last_updated", ""))), styles["Small"])],
     ]
-    t = Table(summary_rows, colWidths=[65*mm, 110*mm])
+    table_width = doc.width
+    t = Table(summary_rows, colWidths=[table_width * 0.68, table_width * 0.32], repeatRows=1)
     t.setStyle(TableStyle([
-        ("FONT", (0, 0), (-1, -1), base_font, 9),
-        ("LINEBELOW", (0, 0), (-1, -1), 0.25, colors.lightgrey),
+        ("FONT", (0, 0), (-1, -1), base_font, 8.8),
+        ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#f3f4f6")),
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.HexColor("#1f2937")),
+        ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#fafafa")]),
+        ("GRID", (0, 0), (-1, -1), 0.3, colors.HexColor("#d1d5db")),
         ("VALIGN", (0, 0), (-1, -1), "TOP"),
-        ("LEFTPADDING", (0, 0), (-1, -1), 4),
-        ("RIGHTPADDING", (0, 0), (-1, -1), 4),
-        ("TOPPADDING", (0, 0), (-1, -1), 2),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 2),
+        ("LEFTPADDING", (0, 0), (-1, -1), 6),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 6),
+        ("TOPPADDING", (0, 0), (-1, -1), 4),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
     ]))
     story.append(Paragraph("Summary", styles["H2"]))
     story.append(t)

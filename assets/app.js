@@ -168,8 +168,6 @@
       { key: "publications_list_b", label: "Publications (List B)", value: fmtNumber(derived.publications_list_b), hint: "Professional articles, case reports & book chapters" },
       { key: "conference_contributions_total", label: "Conference contributions (total)", value: fmtNumber(totals.conference_contributions_total), hint: `Oral: ${fmtNumber(totals.conference_oral_presentations)} · Poster: ${fmtNumber(totals.conference_posters)}` },
       { key: "articles_and_conferences_total", label: "Articles + conferences (total)", value: fmtNumber(derived.articles_and_conferences_total), hint: "Journal articles + conference contributions" },
-      { key: "years_active", label: "Active publication years", value: fmtNumber(derived.years_active), hint: "Derived from min/max year in publications.csv" },
-      { key: "latest_publication_year", label: "Latest publication year", value: fmtNumber(derived.latest_publication_year), hint: "Newest record detected in publications.csv" },
     ];
 
     cards.forEach((c) => {
