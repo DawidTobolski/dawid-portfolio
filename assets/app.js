@@ -131,12 +131,20 @@
     $("#location").textContent = profile?.location || "";
 
     const email = profile?.email || "";
+    const emailAlt = profile?.email_alt || "";
     const emailLink = $("#emailLink");
     const emailBtn = $("#contactEmailBtn");
+    const emailAltWrap = $("#emailAltWrap");
+    const emailAltLink = $("#emailAltLink");
     if (email) {
       emailLink.textContent = email;
       emailLink.href = `mailto:${email}`;
       emailBtn.href = `mailto:${email}`;
+    }
+    if (emailAlt && emailAltWrap && emailAltLink) {
+      emailAltLink.textContent = emailAlt;
+      emailAltLink.href = `mailto:${emailAlt}`;
+      emailAltWrap.hidden = false;
     }
 
     renderExternalLinks(profile);
@@ -160,6 +168,8 @@
       { key: "publications_list_b", label: "Publications (List B)", value: fmtNumber(derived.publications_list_b), hint: "Professional articles, case reports & book chapters" },
       { key: "conference_contributions_total", label: "Conference contributions (total)", value: fmtNumber(totals.conference_contributions_total), hint: `Oral: ${fmtNumber(totals.conference_oral_presentations)} · Poster: ${fmtNumber(totals.conference_posters)}` },
       { key: "articles_and_conferences_total", label: "Articles + conferences (total)", value: fmtNumber(derived.articles_and_conferences_total), hint: "Journal articles + conference contributions" },
+      { key: "years_active", label: "Active publication years", value: fmtNumber(derived.years_active), hint: "Derived from min/max year in publications.csv" },
+      { key: "latest_publication_year", label: "Latest publication year", value: fmtNumber(derived.latest_publication_year), hint: "Newest record detected in publications.csv" },
     ];
 
     cards.forEach((c) => {
@@ -636,11 +646,18 @@
       }).length;
       const confTotal = state.records.filter((r) => r.record_type === "conference_contribution" || r.category === "Conference").length;
       const journalTotal = listA + listB;
+      const years = state.records
+        .map((r) => Number(r.year))
+        .filter((year) => Number.isFinite(year) && year > 0);
+      const minYear = years.length ? Math.min(...years) : null;
+      const maxYear = years.length ? Math.max(...years) : null;
       const derivedTotals = {
         publications_list_a: listA,
         publications_list_b: listB,
         journal_articles_total: journalTotal,
         articles_and_conferences_total: journalTotal + confTotal,
+        years_active: minYear && maxYear ? (maxYear - minYear + 1) : null,
+        latest_publication_year: maxYear,
       };
 
       renderMetrics(summary, derivedTotals);
