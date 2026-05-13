@@ -8,17 +8,17 @@
   "h_index_since_2016": null,
   "i10_index_all": 10,
   "i10_index_since_2016": null,
-  "last_updated": "12.05.2026",
+  "last_updated": "13.05.2026",
   "raw": {
     "search_metadata": {
-      "id": "6a02c70c054e5fd66687862c",
+      "id": "6a041b2d65f701437e5cff6b",
       "status": "Success",
-      "json_endpoint": "https://serpapi.com/searches/zL6IC3DCh9wt-cvI2Os2nA/6a02c70c054e5fd66687862c.json",
-      "created_at": "2026-05-12 06:22:04 UTC",
-      "processed_at": "2026-05-12 06:22:04 UTC",
+      "json_endpoint": "https://serpapi.com/searches/zL6IC3DCh9wt-cvI2Os2nA/6a041b2d65f701437e5cff6b.json",
+      "created_at": "2026-05-13 06:33:17 UTC",
+      "processed_at": "2026-05-13 06:33:17 UTC",
       "google_scholar_author_url": "https://scholar.google.com/citations?user=Rj58qXIAAAAJ&hl=en",
-      "raw_html_file": "https://serpapi.com/searches/zL6IC3DCh9wt-cvI2Os2nA/6a02c70c054e5fd66687862c.html",
-      "total_time_taken": 0.16
+      "raw_html_file": "https://serpapi.com/searches/zL6IC3DCh9wt-cvI2Os2nA/6a041b2d65f701437e5cff6b.html",
+      "total_time_taken": 0.54
     },
     "search_parameters": {
       "engine": "google_scholar_author",
