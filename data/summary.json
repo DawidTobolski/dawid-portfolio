@@ -2,16 +2,16 @@
   "computed_from": "/home/runner/work/dawid-portfolio/dawid-portfolio/data/publications.csv",
   "generated_on": "19.06.2026",
   "totals": {
-    "mnicsw_points": 0,
-    "sum_impact_factor": 0.0,
+    "mnicsw_points": 5607,
+    "sum_impact_factor": 137.318,
     "records_total": 105,
-    "publications_list_a": 0,
-    "publications_list_b": 0,
-    "book_chapters": 0,
-    "conference_contributions_total": 0,
-    "conference_oral_presentations": 0,
-    "conference_posters": 0,
-    "conference_type_unspecified": 0
+    "publications_list_a": 46,
+    "publications_list_b": 23,
+    "book_chapters": 1,
+    "conference_contributions_total": 36,
+    "conference_oral_presentations": 6,
+    "conference_posters": 16,
+    "conference_type_unspecified": 14
   },
   "scholar_metrics": {
     "citations_all": 327,
@@ -20,5 +20,16 @@
     "last_updated": "19.06.2026",
     "profile_url": "https://scholar.google.com/citations?hl=en&user=Rj58qXIAAAAJ"
   },
-  "year_counts": {}
+  "year_counts": {
+    "2026": 7,
+    "2025": 27,
+    "2024": 24,
+    "2023": 8,
+    "2022": 10,
+    "2021": 7,
+    "2020": 3,
+    "2019": 7,
+    "2018": 8,
+    "2017": 4
+  }
 }
