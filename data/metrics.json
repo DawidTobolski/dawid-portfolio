@@ -6,20 +6,20 @@
   "citations_since_2016": null,
   "h_index_all": 11,
   "h_index_since_2016": null,
-  "i10_index_all": 13,
+  "i10_index_all": 14,
   "i10_index_since_2016": null,
-  "last_updated": "22.08.2026",
+  "last_updated": "23.08.2026",
   "raw": {
     "search_metadata": {
-      "id": "6a891e31d2d7400f681a2c51",
+      "id": "6a8a70d5bcd9275ff83b8802",
       "status": "Success",
-      "json_endpoint": "https://serpapi.com/searches/zL6IC3DCh9wt-cvI2Os2nA/6a891e31d2d7400f681a2c51.json",
-      "markdown_endpoint": "https://serpapi.com/searches/zL6IC3DCh9wt-cvI2Os2nA/6a891e31d2d7400f681a2c51.md",
-      "created_at": "2026-08-22 03:57:37 UTC",
-      "processed_at": "2026-08-22 03:57:37 UTC",
+      "json_endpoint": "https://serpapi.com/searches/zL6IC3DCh9wt-cvI2Os2nA/6a8a70d5bcd9275ff83b8802.json",
+      "markdown_endpoint": "https://serpapi.com/searches/zL6IC3DCh9wt-cvI2Os2nA/6a8a70d5bcd9275ff83b8802.md",
+      "created_at": "2026-08-23 04:02:29 UTC",
+      "processed_at": "2026-08-23 04:02:29 UTC",
       "google_scholar_author_url": "https://scholar.google.com/citations?user=Rj58qXIAAAAJ&hl=en",
-      "raw_html_file": "https://serpapi.com/searches/zL6IC3DCh9wt-cvI2Os2nA/6a891e31d2d7400f681a2c51.html",
-      "total_time_taken": 1.88
+      "raw_html_file": "https://serpapi.com/searches/zL6IC3DCh9wt-cvI2Os2nA/6a8a70d5bcd9275ff83b8802.html",
+      "total_time_taken": 2.49
     },
     "search_parameters": {
       "engine": "google_scholar_author",
