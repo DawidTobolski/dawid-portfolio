@@ -2,24 +2,24 @@
   "source": "Google Scholar (via SerpApi)",
   "author_id": "Rj58qXIAAAAJ",
   "profile_url": "https://scholar.google.com/citations?hl=en&user=Rj58qXIAAAAJ",
-  "citations_all": 392,
+  "citations_all": 393,
   "citations_since_2016": null,
   "h_index_all": 11,
   "h_index_since_2016": null,
   "i10_index_all": 15,
   "i10_index_since_2016": null,
-  "last_updated": "16.09.2026",
+  "last_updated": "17.09.2026",
   "raw": {
     "search_metadata": {
-      "id": "6aaa556f73d1759ea5eeecf8",
+      "id": "6aaba7d2124815e7d3850858",
       "status": "Success",
-      "json_endpoint": "https://serpapi.com/searches/I-_X1YiHfWW2xz6G-WLDZhGlPjBpT_vZSkj_WmJ24aE/6aaa556f73d1759ea5eeecf8.json",
-      "markdown_endpoint": "https://serpapi.com/searches/I-_X1YiHfWW2xz6G-WLDZhGlPjBpT_vZSkj_WmJ24aE/6aaa556f73d1759ea5eeecf8.md",
-      "created_at": "2026-09-16 08:38:07 UTC",
-      "processed_at": "2026-09-16 08:38:07 UTC",
+      "json_endpoint": "https://serpapi.com/searches/3t03vvys7HgeG__M5L4N3d6NYg7ucd8AsxuFI9CQy48/6aaba7d2124815e7d3850858.json",
+      "markdown_endpoint": "https://serpapi.com/searches/3t03vvys7HgeG__M5L4N3d6NYg7ucd8AsxuFI9CQy48/6aaba7d2124815e7d3850858.md",
+      "created_at": "2026-09-17 08:41:54 UTC",
+      "processed_at": "2026-09-17 08:41:54 UTC",
       "google_scholar_author_url": "https://scholar.google.com/citations?user=Rj58qXIAAAAJ&hl=en",
-      "raw_html_file": "https://serpapi.com/searches/I-_X1YiHfWW2xz6G-WLDZhGlPjBpT_vZSkj_WmJ24aE/6aaa556f73d1759ea5eeecf8.html",
-      "total_time_taken": 0.97
+      "raw_html_file": "https://serpapi.com/searches/3t03vvys7HgeG__M5L4N3d6NYg7ucd8AsxuFI9CQy48/6aaba7d2124815e7d3850858.html",
+      "total_time_taken": 0.52
     },
     "search_parameters": {
       "engine": "google_scholar_author",
