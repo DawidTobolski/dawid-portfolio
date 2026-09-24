@@ -4,14 +4,14 @@
   "totals": {
     "mnicsw_points": 5892,
     "sum_impact_factor": 145.818,
-    "records_total": 108,
+    "records_total": 117,
     "publications_list_a": 48,
     "publications_list_b": 24,
     "book_chapters": 1,
-    "conference_contributions_total": 36,
-    "conference_oral_presentations": 6,
-    "conference_posters": 16,
-    "conference_type_unspecified": 14
+    "conference_contributions_total": 45,
+    "conference_oral_presentations": 7,
+    "conference_posters": 20,
+    "conference_type_unspecified": 18
   },
   "scholar_metrics": {
     "citations_all": 396,
@@ -21,15 +21,15 @@
     "profile_url": "https://scholar.google.com/citations?hl=en&user=Rj58qXIAAAAJ"
   },
   "year_counts": {
-    "2026": 10,
+    "2026": 21,
     "2025": 27,
-    "2024": 24,
+    "2024": 23,
     "2023": 8,
     "2022": 10,
     "2021": 7,
     "2020": 3,
     "2019": 7,
     "2018": 8,
-    "2017": 4
+    "2017": 3
   }
 }
