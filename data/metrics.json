@@ -8,18 +8,18 @@
   "h_index_since_2016": null,
   "i10_index_all": 15,
   "i10_index_since_2016": null,
-  "last_updated": "29.09.2026",
+  "last_updated": "30.09.2026",
   "raw": {
     "search_metadata": {
-      "id": "6abb8a7eac17651bd4adefe3",
+      "id": "6abcda376372f3bd08dffe42",
       "status": "Success",
-      "json_endpoint": "https://serpapi.com/searches/d4gP2C__2nmPV7DU0uPExHVY36x4JZ9op2NDicXY4KM/6abb8a7eac17651bd4adefe3.json",
-      "markdown_endpoint": "https://serpapi.com/searches/d4gP2C__2nmPV7DU0uPExHVY36x4JZ9op2NDicXY4KM/6abb8a7eac17651bd4adefe3.md",
-      "created_at": "2026-09-29 09:53:02 UTC",
-      "processed_at": "2026-09-29 09:53:02 UTC",
+      "json_endpoint": "https://serpapi.com/searches/GCBc6vWngQaYqOY5Yfc3TP-5bQXRg10TYu1f2PqR2V4/6abcda376372f3bd08dffe42.json",
+      "markdown_endpoint": "https://serpapi.com/searches/GCBc6vWngQaYqOY5Yfc3TP-5bQXRg10TYu1f2PqR2V4/6abcda376372f3bd08dffe42.md",
+      "created_at": "2026-09-30 09:45:27 UTC",
+      "processed_at": "2026-09-30 09:45:27 UTC",
       "google_scholar_author_url": "https://scholar.google.com/citations?user=Rj58qXIAAAAJ&hl=en",
-      "raw_html_file": "https://serpapi.com/searches/d4gP2C__2nmPV7DU0uPExHVY36x4JZ9op2NDicXY4KM/6abb8a7eac17651bd4adefe3.html",
-      "total_time_taken": 0.54
+      "raw_html_file": "https://serpapi.com/searches/GCBc6vWngQaYqOY5Yfc3TP-5bQXRg10TYu1f2PqR2V4/6abcda376372f3bd08dffe42.html",
+      "total_time_taken": 1.15
     },
     "search_parameters": {
       "engine": "google_scholar_author",
