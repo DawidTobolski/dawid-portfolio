@@ -1,11 +1,11 @@
 {
   "computed_from": "/home/runner/work/dawid-portfolio/dawid-portfolio/data/publications.csv",
-  "generated_on": "29.10.2026",
+  "generated_on": "30.10.2026",
   "totals": {
-    "mnicsw_points": 6282,
-    "sum_impact_factor": 156.918,
-    "records_total": 122,
-    "publications_list_a": 51,
+    "mnicsw_points": 6422,
+    "sum_impact_factor": 160.018,
+    "records_total": 123,
+    "publications_list_a": 52,
     "publications_list_b": 26,
     "book_chapters": 1,
     "conference_contributions_total": 45,
@@ -21,7 +21,7 @@
     "profile_url": "https://scholar.google.com/citations?hl=en&user=Rj58qXIAAAAJ"
   },
   "year_counts": {
-    "2026": 26,
+    "2026": 27,
     "2025": 27,
     "2024": 23,
     "2023": 8,
